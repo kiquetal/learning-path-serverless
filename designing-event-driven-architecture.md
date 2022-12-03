@@ -57,4 +57,22 @@ Advantages
 Disadvantages
 
 - Client must use graphql
-- 
+
+
+### Serverless Data Processing Patterns
+
+- Data processing with Amazon Kinesis
+
+Ingest and processing data in real time
+
+| ShardLImit | Writes  | Reads                                            |
+| ---------- | ------- |--------------------------------------------------|
+| Rate       | 1000 records per second | 5 transactions per second , up to 10 000 records |
+| Data       | 1 mb per second | 2 mb per second                                  |
+
+TOtal shard capacity 
+
+4 000 MB per second = (1000  * )  S
+s = shards
+s = 4 
+
