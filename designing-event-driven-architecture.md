@@ -76,3 +76,43 @@ TOtal shard capacity
 s = shards
 s = 4 
 
+### Kinesis Data Stream: 
+You need to specify the number of shards
+
+### Kinesis Data Firehose: 
+You don´t need to set the number of shards
+
+### Kinesis Data Analytics: 
+use SQL to filter records
+
+|   Kinesis Data Stream | Kinesis Data Firehose                                                
+| ---------------------- |----------------------------------------------------------------------|
+| Write custom consumers, with more targers | The use case of transforming and storing streamingdata is simplified | 
+| Order delivery and exactly once delicery is guaranteed | Order not guaranteed, messages could be delivered more than once     |
+| Failing messages block the shard until it succeeds | Retry mechanism are available for each delivery target |
+| You set the number of shard | You set the data vaolume and the service manages the number of shards |
+| Multiple consumers and multiple types of consumers are used| Stream is associated with a single destination |
+
+### Streaming or messaging for data processing
+
+|    Messaging | Streaming                                                                           |
+| ----------- |-------------------------------------------------------------------------------------|
+| The core entity is an individual message, and messages rates vary | You look at the stream of messages together, and the stream is generally continuous |
+| Messages are deleted when they've been consumder | Data remains on the stream for a period of time. Consumers must maintain a pointer  | 
+| COnfigure retries and dead-letter queue for failures | A message is retried until it succeds or expires. You must build error handling into your function to bypass a record |
+
+#### Miscelaneous
+
+Kinesis Data Firehose is ideal for ingesting data for storage. It can
+also transform data using an AWS lAMBDA function before storing it in
+
+Kinesis Data Firehose streams can only be associated with a single consumer
+and the target must be amazon S3, Amazon Redshift, Amazon Elasticsearch Service, or Splunk.
+
+Messaging services like SQS or SNS would be better suited for
+processing and responding to individual messages than processing
+a stream of data.
+
+Kinesis Data Firehose has built-in retries, Amazon Kinesis Data Streams
+does not, bur order is not guaranteed with Kinesis Data Firehose.
+
