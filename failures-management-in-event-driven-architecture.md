@@ -102,3 +102,69 @@ Stream:
         Error handling – Write your functions to delete each message as it is successfully processed. Move failed messages 
         to a dead-letter queue configured on the source SQS queue.
 
+##### Failure management accross your application
+
+- AWS Step Functions
+
+- Amazon SQS
+
+- Amazon SNS
+
+- Aws X-Ray
+
+
+>As a best practice, ensure that production code can handle Lambda service exceptions
+> (Lambda.ServiceException and Lambda.SdkclientException).
+
+
+#### Failure management with dead-letter queue
+
+You configure the dead-letter queue on the source queue.
+
+| Dead-Letter queue on Lambda function                                                                | Dead-Letter queue on SQS source queue|
+|-----------------------------------------------------------------------------------------------------|--------------------------------------|
+ | Dead-Letter queue is configured as part of the function                                             | Dead-letter queue is poart of the queu policy|
+| Messages that error out after two built-in retries are routed to the dead-letter queue              | The policy describes how many retries before an item is moved to a dead-letter queue | 
+| <td colspan=2> Both need a mechanism to redrive messages back to the original source for processing |
+
+
+#### Distributed tracing with AWS X-ray
+
+- Traces: You've identified failures at an Integration point and want to review
+individual requests
+
+- Subsegments: You need a more granular breakout of the work done in a request
+to resolve issue
+
+- Service Graph: Customers have reported issues using a servie, and you
+need a quick sense of status.
+
+- Annotations: YOu want to be able to group traces accross application, operations
+to compare perfomance.
+
+
+
+#### Tests
+
+
+
+If a Lambda function returns errors when processing messages, 
+Lambda decreases the number of processes polling the queue. 
+In addition, Lambda has a default of five parallel processes to get things off of a queue.
+
+
+
+A best practice is to set your visibility timeout to 6 times the function timeout, not 3 times. 
+If the Lambda service detects an increase in queue size,
+it will automatically increase how many batches it gets from the queue, each time.
+That means it will increase the number of concurrent Lambda functions it invokes. 
+Lastly, if the visibility timeout expires before the 
+Lambda function has processed the messages in a batch, 
+any message in that batch that hasn’t been deleted by your 
+function will become visible again.
+
+
+
+
+
+
